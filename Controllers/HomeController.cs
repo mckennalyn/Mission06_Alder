@@ -6,27 +6,40 @@ namespace Mission06_Alder.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private MovieFormContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MovieFormContext temp)
         {
-            _logger = logger;
+            _context = temp;
         }
-
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult form()
+        {
+            return View("form");
+        }
+
+
+        [HttpPost]
+        public IActionResult form(Form response)
+        {
+            response.MovieLent = response.MovieLent ?? "";
+            response.MovieNotes = response.MovieNotes ?? "";
+
+            _context.Forms.Add(response); 
+            _context.SaveChanges();
+
+            return View("Confirmation");
+        }
+
+        public IActionResult GetToKnowJoel()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

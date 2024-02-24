@@ -1,4 +1,4 @@
-namespace Mission06_Alder.Models
+﻿namespace Mission06_Alder.Models
 {
     public class ErrorViewModel
     {
