@@ -18,22 +18,27 @@ namespace Mission06_Alder.Controllers
         }
 
         [HttpGet]
-        public IActionResult form()
+        public IActionResult Movies()
         {
-            return View("form");
+            return View("Movies", new Movie());
         }
 
 
         [HttpPost]
-        public IActionResult form(Form response)
+        public IActionResult Movies(Movie response)
         {
-            response.MovieLent = response.MovieLent ?? "";
-            response.MovieNotes = response.MovieNotes ?? "";
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Add(response);
+                _context.SaveChanges();
 
-            _context.Forms.Add(response); 
-            _context.SaveChanges();
+                return View("Confirmation", response);
+            }
+            else
+            {
+                return View(response);
+            }
 
-            return View("Confirmation");
         }
 
         public IActionResult GetToKnowJoel()
@@ -41,5 +46,48 @@ namespace Mission06_Alder.Controllers
             return View();
         }
 
+        public IActionResult MovieList()
+        {
+            var movies = _context.Movies
+                .OrderBy(x => x.Title).ToList();
+
+            return View(movies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int Id)
+        {
+            var recordToEdit = _context.Movies
+                .Single(x => x.MovieId == Id);
+
+            return View("Movies", recordToEdit);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Movie updatedInfo)
+        {
+            _context.Update(updatedInfo);
+            _context.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var recordToDelete = _context.Movies
+                .Single(x => x.MovieId == id);
+
+            return View(recordToDelete);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Movie deletedInfo)
+        {
+            _context.Movies.Remove(deletedInfo);
+            _context.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
     }
 }

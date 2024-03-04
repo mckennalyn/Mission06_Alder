@@ -1,34 +1,40 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mission06_Alder.Models
 {
-    public class Form
+    public class Movie
     {
         [Key]
         [Required]
-        public int FormID { get; set; }
+        public int MovieId { get; set; } 
 
-        [Required(ErrorMessage = "This field is required.")]
-        public string MovieCategory { get; set; }
+        [Required]
 
-        [Required(ErrorMessage = "This field is required.")]
-        public string MovieTitle { get; set; }
+        [ForeignKey("CategoryId")]
+        public int? CategoryId { get; set; }
+        public Category? Category { get; set; }
 
-        [Required(ErrorMessage = "This field is required.")]
-        public int MovieYear { get; set; }
+        [Required(ErrorMessage = "Title: Field Required")]
+        public string Title { get; set; }
 
-        [Required(ErrorMessage = "This field is required.")]
-        public string MovieDirector { get; set; }
+        [Required(ErrorMessage = "Year: Field Required")]
+        [Range(1888, int.MaxValue, ErrorMessage = "Movies weren't out before 1888!")]
+        public int Year { get; set; }
 
-        [Required(ErrorMessage = "This field is required.")]
-        public string MovieRating { get; set; }
+        public string? Director { get; set; }
 
-        public bool? MovieEdited { get; set; }
-        public string? MovieLent { get; set; }
+        public string? Rating { get; set; }
+
+        [Required(ErrorMessage = "Edited: Field Required")]
+        public bool Edited { get; set; }
+        public string? LentTo { get; set; }
+
+        [Required(ErrorMessage = "CopiedToPlex: Field Required")]
+        public bool CopiedToPlex { get; set; }
 
         [StringLength(25, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string? MovieNotes { get; set; }
-
+        public string? Notes { get; set; }
     }
 }
